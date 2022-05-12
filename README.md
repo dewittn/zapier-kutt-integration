@@ -1,3 +1,3 @@
 # Zapier Kutt Integration
 
-This code can be used to shorten a URL with Kutt in a Zapier Code integration.
+Use Kutt as a URL shortener for Zapier. Requires a subscription and the Zapier Code Action.
