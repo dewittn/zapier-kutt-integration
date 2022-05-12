@@ -1,4 +1,4 @@
-// Test Script
+// Integration Test Script
 // Use this script to test the integration and debug any problems.
 import fetch from "node-fetch";
 
