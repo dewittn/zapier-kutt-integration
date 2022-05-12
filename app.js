@@ -1,10 +1,10 @@
 // Test Script
 // Use this script to test the integration and debug any problems.
 import fetch from "node-fetch";
-var output;
 
 // Test Data: This mimics the way Zapier passes variables
 const inputData = { url: "https://github.com/thedevs-network/kutt" };
+var output;
 
 // This anonymous function mimics the Zapier environment.
 (async function () {
@@ -15,6 +15,7 @@ const inputData = { url: "https://github.com/thedevs-network/kutt" };
 
   const linksURL = `${baseDomain}/api/v2/links`;
   const data = { domain: domain, target: inputData.url };
+  var shortURL;
 
   function getErrorMessage(message) {
     if (message === "reCAPTCHA is not valid. Try again.") {
@@ -33,10 +34,10 @@ const inputData = { url: "https://github.com/thedevs-network/kutt" };
       body: JSON.stringify(data),
     });
     const body = await response.json();
-    const shortURL = body.link || getErrorMessage(body.error);
+    output = { shortURL: body.link || getErrorMessage(body.error) };
   } catch (error) {
     console.log(error.message);
   }
 
-  output = { shortURL: shortURL, testURL: testURL, service: linksURL, domain: domain };
+  console.log(output);
 })();
