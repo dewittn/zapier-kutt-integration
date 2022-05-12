@@ -5,10 +5,15 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --trace-warnings ./app.js"
   },
-  "author": "Nelson/Roberto",
-  "license": "ISC",
+  "author": "Nelson/Roberto <git@nelsonroberto.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dewittn/zapier-kutt-integration.git"
+  },
+  "homepage": "https://github.com/dewittn/zapier-kutt-integration#readme",
   "dependencies": {
     "node-fetch": "^3.2.4"
   }
