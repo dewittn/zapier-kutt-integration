@@ -1,21 +1,35 @@
 // Copy this script into your Zapier Code Actions and update vars
-const baseDomain = "https://kutt.it";
-const apiKey = "";
-// Optional Param if you are using Kutt with multiple domains
-const domain = "";
-
+const apiKey = inputData["apiKey"];
+const targetURL = inputData["targetUrl"];
+const baseDomain = inputData["baseDomain"];
+const shortLinkDomain = inputData["shortLinkDomain"];
 const linksURL = `${baseDomain}/api/v2/links`;
-const data = { domain: domain, target: inputData.url };
-var shortURL;
 
-function getErrorMessage(message) {
-  if (message === "reCAPTCHA is not valid. Try again.") {
-    return "API key is invalid.";
-  }
-  return message;
+if (apiKey === "") {
+  return console.log("Please set an API key first.");
 }
 
-try {
+async function checkForShortLink(url) {
+  const response = await fetch(linksURL, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "X-API-KEY": apiKey,
+    },
+  });
+
+  const payload = await response.json();
+  if (payload.error)
+    return logErrorMessage("checkForShortLink - " + payload.error);
+
+  const items = payload.data.filter((item) => item.target == url);
+
+  return items.length == 0 ? null : items[0].link;
+}
+
+// Creates a shortlink
+async function createShortLink(target) {
+  const data = { domain: shortLinkDomain, target: target };
   const response = await fetch(linksURL, {
     method: "POST",
     headers: {
@@ -24,10 +38,38 @@ try {
     },
     body: JSON.stringify(data),
   });
-  const body = await response.json();
-  output = { shortURL: body.link || getErrorMessage(body.error) };
-} catch (error) {
-  console.log(error.message);
+
+  const paylod = await response.json();
+
+  return paylod.error
+    ? logErrorMessage("createShortLink - " + paylod.error)
+    : paylod.link;
 }
 
-console.log(output);
+function logErrorMessage(message) {
+  if (message === "reCAPTCHA is not valid. Try again.") {
+    message = "API key is invalid.";
+  }
+  console.log("Payload Error: " + message);
+
+  return targetURL;
+}
+
+// Checks to see if url has already been shortened and returns link if it has
+// If something goes wrong the original URL is returned
+// This prevents the Zapier automation from crashing
+try {
+  const exsistingLink = await checkForShortLink(targetURL);
+  const shortLink =
+    exsistingLink != null ? exsistingLink : await createShortLink(targetURL);
+
+  output = { targetURL: targetURL, shortLink: shortLink };
+} catch (error) {
+  console.log("Catch Error: " + error.message);
+  const shortLink = targetURL;
+  output = {
+    inputData: inputData,
+    targetURL: targetURL,
+    shortLink: shortLink,
+  };
+}
