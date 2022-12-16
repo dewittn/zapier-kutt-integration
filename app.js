@@ -1,12 +1,11 @@
 // Integration Test Script
 // Use this script to test the integration and debug any problems.
 import fetch from "node-fetch";
-// Test Data: This mimics the way Zapier passes variables
-import inputData from "./inputData.json" assert { type: "json" };
-
+import testData from "./testData.json" assert { type: "json" };
 var output;
-// This anonymous function mimics the Zapier environment.
-(async function () {
+
+// This function mimics the Zapier environment.
+testData.forEach(async (inputData) => {
   const apiKey = inputData["apiKey"];
   const targetURL = inputData["targetUrl"];
   const baseDomain = inputData["baseDomain"];
@@ -82,5 +81,5 @@ var output;
     };
   }
 
-  console.log(output);
-})();
+  console.log(`\n--------\n${inputData["name"]}\n${JSON.stringify(output)}`);
+});

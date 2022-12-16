@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Test 1: Create new link",
+    "apiKey": "",
+    "targetUrl": "https://github.com/thedevs-network/kutt",
+    "baseDomain": "https://kutt.it",
+    "shortLinkDomain": ""
+  },
+  {
+    "name": "Test 2: Fetch existing link",
+    "apiKey": "",
+    "targetUrl": "https://github.com/thedevs-network/kutt",
+    "baseDomain": "https://kutt.it",
+    "shortLinkDomain": ""
+  },
+  {
+    "name": "Test 3: Create new link with a different domain",
+    "apiKey": "",
+    "targetUrl": "https://github.com/thedevs-network/kutt",
+    "baseDomain": "https://kutt.it",
+    "shortLinkDomain": "example.com"
+  }
+]
